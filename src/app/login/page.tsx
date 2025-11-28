@@ -2,13 +2,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const USERNAME = 'polenta';
 const PASSWORD = 'perfo123'; // cambiá esto si querés
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
@@ -18,10 +20,18 @@ export default function LoginPage() {
 
     if (user === USERNAME && pass === PASSWORD) {
       const oneWeek = 60 * 60 * 24 * 7;
+
+      // Cookie (si lo querés seguir usando)
       document.cookie = `monitor_auth=ok; path=/; max-age=${oneWeek}`;
 
-      // 👉 Después de loguear, siempre mandamos a /clients
-      router.push('/clients');
+      // 🔑 LO IMPORTANTE: que coincida con MonitorAuthGate
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('monitor_auth', 'ok');
+      }
+
+      // si vino con ?from=/algo volvemos ahí, sino /clients
+      const from = searchParams.get('from') || '/clients';
+      router.push(from);
     } else {
       setError('Usuario o contraseña incorrectos');
     }
