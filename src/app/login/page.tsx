@@ -1,19 +1,31 @@
 // src/app/login/page.tsx
 'use client';
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const USERNAME = 'polenta';
 const PASSWORD = 'perfo123'; // cambiá esto si querés
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
+  const [fromPath, setFromPath] = useState('/clients'); // destino por defecto
+
+  // 👉 Leemos el ?from=... usando la API del navegador
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from');
+
+    if (from && from.startsWith('/')) {
+      setFromPath(from);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,17 +33,16 @@ export default function LoginPage() {
     if (user === USERNAME && pass === PASSWORD) {
       const oneWeek = 60 * 60 * 24 * 7;
 
-      // Cookie (si lo querés seguir usando)
+      // Cookie (opcional)
       document.cookie = `monitor_auth=ok; path=/; max-age=${oneWeek}`;
 
-      // 🔑 LO IMPORTANTE: que coincida con MonitorAuthGate
+      // 🔑 Coincidir con MonitorAuthGate (usa localStorage)
       if (typeof window !== 'undefined') {
         window.localStorage.setItem('monitor_auth', 'ok');
       }
 
-      // si vino con ?from=/algo volvemos ahí, sino /clients
-      const from = searchParams.get('from') || '/clients';
-      router.push(from);
+      // Redirigimos a lo que venía en ?from= o, si no, /clients
+      router.push(fromPath);
     } else {
       setError('Usuario o contraseña incorrectos');
     }
