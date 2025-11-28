@@ -1,26 +1,286 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ====== White Edition (única) ====== */
+:root{
+  --bg: #ffffff;
+  --ink: #0f172a;
+  --ink-2:#475569;
+  --bd: #e5e7eb;
+  --bd-2:#d1d5db;
+  --muted:#f8fafc;
+  --accent:#2563eb;
+  --ok:#16a34a; --warn:#ca8a04; --bad:#ef4444;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
+html, body { height: 100%; }
+body{
+  background: var(--bg);
+  color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* layout helpers */
+.page-wrap{ padding:24px; }
+.container{ max-width: 1200px; margin: 0 auto; }
+.header-right{ display:flex; align-items:center; gap:12px; }
+
+/* header */
+.section-header{
+  display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px;
+}
+.section-title{ font-size:22px; font-weight:700; color:var(--ink); }
+.section-sub{ color:var(--ink-2); font-size:13px; }
+
+/* groups (buscador / filtros / fecha) */
+.group{
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  padding:10px; background: var(--muted); border:1px solid var(--bd); border-radius:12px;
+}
+.group--inline{ padding:8px }
+.group-label{ color:var(--ink-2); font-size:12px; margin-right:4px; }
+
+/* pills (tabs) */
+.pill{
+  padding:8px 12px; border-radius:999px; border:1px solid var(--bd);
+  background:#fff; color:var(--ink-2); font-size:12px; cursor:pointer;
+}
+.pill:hover{ background:#f1f5f9; }
+.pill--active{ color:#fff; background:var(--accent); border-color:var(--accent); }
+
+/* inputs fecha */
+.select, .date{
+  padding:8px 10px; border-radius:10px; border:1px solid var(--bd);
+  background:#fff; color: var(--ink); font-size:12px;
+}
+.select--sm, .date--sm{ padding:6px 10px; }
+.select:focus, .date:focus{ outline: none; border-color: var(--bd-2); }
+
+.badge-range{
+  padding:4px 8px; border-radius:999px; border:1px solid var(--bd);
+  background:#fff; color:var(--ink-2); font-size:12px;
+}
+
+/* cards (por si quedan en otras vistas) */
+.card{
+  border:1px solid var(--bd); border-radius:12px; background:#fff;
+  padding:14px; box-shadow:0 1px 1px rgba(0,0,0,.03);
+}
+.card-title{ color:var(--ink-2); font-size:12px; }
+.card-value{ font-size:22px; font-weight:700; }
+
+/* tabla (blanca) */
+.table{
+  border-collapse:collapse; min-width:860px; width:100%;
+  color: var(--ink); background:#fff; border:1px solid var(--bd);
+  border-radius:12px; overflow:hidden;
+}
+.table thead tr{ background:#f8fafc; }
+.table th{
+  text-align:left; font-weight:600; font-size:13px; color:#0f172a;
+  padding:10px; border-bottom:1px solid var(--bd);
+}
+.table td{ padding:10px; border-top:1px solid var(--bd); }
+.table tfoot td{ background:#f8fafc; }
+
+/* botón volver */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px; border:1px solid var(--bd);
+  background:#fff; color:var(--accent); cursor:pointer; text-decoration:none;
+}
+.btn:hover{ background:#f1f5f9; }
+.btn-icon{ width:16px; height:16px; display:inline-block; }
+/* === OVERRIDES FINALES (FORZAR WHITE UI) === */
+:root { color-scheme: light; }
+
+.page-wrap, .container { background: #fff !important; }
+.group, .card, .select, .date, .badge-range, .btn { 
+  background: #fff !important; 
+  border-color: #e5e7eb !important; 
+  color: #0f172a !important;
+}
+.pill { background:#fff !important; color:#475569 !important; border-color:#e5e7eb !important; }
+.pill--active { background:#2563eb !important; color:#fff !important; border-color:#2563eb !important; }
+
+.table {
+  background:#fff !important; 
+  border:1px solid #e5e7eb !important; 
+  color:#0f172a !important;
+}
+.table thead tr { background:#f8fafc !important; }
+.table th, .table td { border-color:#e5e7eb !important; }
+
+input[type="search"], .search, .search * {
+  background:#fff !important; 
+  color:#0f172a !important; 
+  border-color:#e5e7eb !important;
+}
+
+/* por si quedó algún “dark gradient” viejo en body */
+body { background:#fff !important; }
+/* === Neumorphism theme (light) ========================================== */
+:root{
+  --bg: #eef2f7;            /* background base */
+  --surface: #f5f7fb;       /* cards/inputs */
+  --text: #0f172a;          /* slate-900 */
+  --muted: #64748b;         /* slate-500 */
+  --border: #e6ebf3;
+
+  /* sombras suaves (elevado e inset) */
+  --shadow-up: -10px -10px 24px #ffffff, 10px 10px 24px rgba(0,0,0,0.08);
+  --shadow-sm-up: -6px -6px 16px #ffffff, 6px 6px 16px rgba(0,0,0,0.08);
+  --shadow-inset: inset -6px -6px 12px #ffffff, inset 6px 6px 12px rgba(0,0,0,0.1);
+
+  --radius-xl: 16px;
+  --radius-lg: 12px;
+
+  /* estados */
+  --ok: #16a34a;       /* green-600 */
+  --warn: #ca8a04;     /* amber-600 */
+  --bad: #ef4444;      /* red-500 */
+  --accent: #2563eb;   /* blue-600 */
+}
+
+/* fondo general */
+html, body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* contenedor principal si usás .page-wrap */
+.page-wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ====== Neo primitives =================================================== */
+.neo-card{
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-up);
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.neo-input,
+.neo-select,
+.neo-btn,
+.neo-pill{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm-up);
+  color: var(--text);
+  transition: transform .08s ease, box-shadow .2s ease;
+}
+
+.neo-input, .neo-select{
+  padding: 8px 10px;
+}
+
+.neo-input:focus,
+.neo-select:focus{
+  outline: none;
+  box-shadow: var(--shadow-inset);
+}
+
+/* botón “volver”, etc. */
+.neo-btn{
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.neo-btn:hover{ transform: translateY(-1px); }
+.neo-btn:active{ box-shadow: var(--shadow-inset); transform: translateY(0); }
+
+/* pastillas reutilizables (tabs/pills) */
+.neo-pill{
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--muted);
+}
+.neo-pill.is-active{
+  color: var(--accent);
+  box-shadow: var(--shadow-inset);
+}
+
+/* badges de estado (Activa / Pausada / Inactiva) */
+.badge{
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm-up);
+}
+.badge--ok{    color: var(--ok);    background: rgba(22,163,74,.08); }
+.badge--warn{  color: var(--warn);  background: rgba(202,138,4,.10); }
+.badge--bad{   color: var(--bad);   background: rgba(239,68,68,.10); }
+
+/* tabla */
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-up);
+}
+.table thead th{
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 12px 10px;
+  background: #f0f3f9;
+  border-bottom: 1px solid var(--border);
+}
+.table tbody td{
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.table tfoot td{
+  padding: 12px 10px;
+  background: #f0f3f9;
+  font-weight: 700;
+}
+
+/* header y grupos */
+.section-header{
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
+}
+.section-title{ font-size: 22px; font-weight: 800; }
+.section-sub{ color: var(--muted); font-size: 12px; }
+.header-right{ display:flex; gap: 12px; align-items: center; }
+
+.container{ margin-top: 12px; }
+.group{ display:flex; align-items:center; gap:8px; }
+.group-label{ color: var(--muted); font-size: 12px; }
+
+.badge-range{ padding:2px 8px; border-radius: 999px; background:#f0f3f9; border:1px solid var(--border); }
+
+/* semáforo de 3 puntos */
+.traffic-dots{ display:flex; align-items:center; gap:6px; }
+.dot{
+  width:8px; height:8px; border-radius:999px;
+  background: rgba(148,163,184,.25);
+  box-shadow: inset 1px 1px 2px rgba(255,255,255,0.6), inset -1px -1px 2px rgba(0,0,0,0.06);
+}
+.dot--ok{   background: #22c55e; }
+.dot--warn{ background: #f59e0b; }
+.dot--bad{  background: #ef4444; }
+/* Fuerza un único color de fondo INDEPENDIENTEMENTE de los componentes */
+html, body, #__next, main, .page-wrap {
+  background: #ffffff !important;  /* Cambialo por el color que quieras */
+  background-color: #ffffff !important;
+}
+
+/* Quita cualquier fondo heredado de cards o contenedores */
+.neo-card,
+section,
+div {
+  background: transparent !important;
 }
